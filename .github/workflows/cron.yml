@@ -1,11 +1,12 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: cron-update
 
 on:
   schedule:
     - cron: "0 * * * *"
   workflow_dispatch:
+
 permissions:
   contents: write # To write the generated contents to the readme
 
@@ -17,12 +18,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-          with:
-            node-version: 18
-      - run: npm run build
-      - run:
-          using: 'node18'
-          main: 'dist/index.js'
-          with:
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            WATCHED_LIST: git@github.com:hanyaonian/learning.git
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Testing script
+        run: node dist/index.js
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WATCHED_LIST: git@github.com:hanyaonian/learning.git

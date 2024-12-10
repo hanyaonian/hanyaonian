@@ -30,8 +30,8 @@ const loadRepoCommit = async (
 };
 
 (async () => {
-  const watched_list_str = core.getInput("WATCHED_LIST");
-  const token = core.getInput("GH_TOKEN");
+  const watched_list_str = process.env.WATCHED_LIST;
+  const token = process.env.GH_TOKEN;
   core.info(`test get watched_list: ${JSON.stringify(watched_list_str)}`);
   core.info(
     `test get gh_token: token length ${token.length}, type ${typeof token}`
