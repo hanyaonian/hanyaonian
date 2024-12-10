@@ -25,7 +25,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Testing script
-        run: node dist/index.js
+        run: node dist/index.mjs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WATCHED_LIST: git@github.com:hanyaonian/learning.git
