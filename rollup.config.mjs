@@ -10,6 +10,6 @@ export default {
   },
   // https://github.com/vitejs/vite/issues/11657
   preserveSymlinks: true,
-  external: ["@octokit/core", "git-url-parse", "@actions/core"],
+  external: ["@octokit/core", "git-url-parse", "@actions/core", "zx"],
   plugins: [typescript(), nodeResolve({})],
 };
