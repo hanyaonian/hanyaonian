@@ -65,6 +65,8 @@ const getListDisplayTemplate = (info: DisplayListItem) =>
 
 const updateGit = async () => {
   const commit_msg = `chore: auto update at ${new Date().toLocaleDateString()}`;
+  await $`git config user.name 'github-actions[bot]'`;
+  await $`git config user.email 'github-actions[bot]@users.noreply.github.com'`;
   await $`git add .`;
   await $`git commit -m ${commit_msg}`;
   await $`git push`;
