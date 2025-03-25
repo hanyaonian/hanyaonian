@@ -1,9 +1,10 @@
-import { Octokit } from "@octokit/core";
-import { $ } from "zx";
-import fs from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
+import { resolve } from "path";
+
 import GitUrlParse from "git-url-parse";
-import core from "@actions/core";
-import path from "path";
+import { Octokit } from "@octokit/core";
+import { setFailed, info } from "@actions/core";
+import { $ } from "zx";
 
 type DisplayListItem = {
   project: string;
@@ -47,7 +48,7 @@ const loadRepoCommit = async (raw_repo: string): Promise<DisplayListItem> => {
     repo: name,
   });
   if (!commit_info) {
-    core.setFailed("load commit info failed.");
+    setFailed("load commit info failed.");
   }
   const { commit = {} } = commit_info;
   const { committer = {} } = commit;
@@ -73,40 +74,43 @@ const updateGit = async () => {
 };
 
 const updateReadme = async (params: DisplayListItem[]) => {
-  const readme_path = path.resolve("./README.md");
-  const readme_content = await fs.readFile(readme_path, {
+  const readme_path = resolve("./README.md");
+  const current_content = await readFile(readme_path, {
     encoding: "utf-8",
   });
   const start_tag: string = "<!-- WATCHED_PROJECTS_START_TAG -->";
   const end_tag: string = "<!-- WATCHED_PROJECTS_END_TAG -->";
   const insert = (content: string) => {
-    return readme_content.replace(
+    return current_content.replace(
       new RegExp(`${start_tag}([\\s\\S]*?)${end_tag}`, "g"),
       () => {
         return `${start_tag}\n${content}\n${end_tag}`;
       }
     );
   };
-  const new_content = insert(params.map(getListDisplayTemplate).join("\n"));
-  if (new_content !== readme_content) {
-    await fs.writeFile(readme_path, new_content, { encoding: "utf-8" });
+  const updated_content = insert(params.map(getListDisplayTemplate).join("\n"));
+  if (updated_content !== current_content) {
+    await writeFile(readme_path, updated_content, { encoding: "utf-8" });
     await updateGit();
   }
 };
 
-(async () => {
-  const watched_list_str = process.env.WATCHED_LIST;
-  core.info(`test get watched_list: ${JSON.stringify(watched_list_str)}`);
-  const watched_list = watched_list_str
+const getAllWatchList = (repo_str: string) => {
+  return repo_str
     .split(",")
     .map((repo) => repo.trim())
     .filter((repo) => !!repo);
+};
+
+(async () => {
+  info(`test get watched_list: ${process.env.WATCHED_LIST}`);
+  const watched_list = getAllWatchList(process.env.WATCHED_LIST);
   try {
     const commit_messages = await Promise.all(
       watched_list.map((repo) => loadRepoCommit(repo))
     );
     await updateReadme(commit_messages);
   } catch (err) {
-    core.setFailed(err.message);
+    setFailed(err.message);
   }
 })();

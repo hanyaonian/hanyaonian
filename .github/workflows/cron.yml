@@ -24,7 +24,7 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
-      - name: Testing script
+      - name: Update
         run: node dist/index.mjs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
