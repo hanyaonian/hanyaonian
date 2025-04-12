@@ -13,9 +13,10 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "zx": "^8.2.4",
     "@actions/core": "^1.11.1",
     "@octokit/core": "^6.1.2",
-    "git-url-parse": "^16.0.0"
+    "@types/git-url-parse": "^16.0.0",
+    "git-url-parse": "^16.0.1",
+    "zx": "^8.2.4"
   }
 }
