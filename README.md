@@ -5,5 +5,5 @@
 ## Recently with...
 
 <!-- WATCHED_PROJECTS_START_TAG -->
-- [learning](https://github.com/hanyaonian/learning/commit/d2ca0d7f237c0aee7a5ce3f1fb9932e90dfe97b2): Last updated at 9/28/2025, by `MichaelHyn`
+- [learning](https://github.com/hanyaonian/learning/commit/7dcc8d1619d323f58b5a28f1836fb38982a2ea28): Last updated at 10/5/2025, by `MichaelHyn`
 <!-- WATCHED_PROJECTS_END_TAG -->
